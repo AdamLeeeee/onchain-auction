@@ -7,7 +7,7 @@ contract Auction {
     address public highestBidder;
     uint256 public highestBid;
     mapping(address => uint256) public bids;
-    mapping (address => uint256) public coolTime;
+    mapping(address => uint256) public coolTime;
     uint256 public coolTimeLimit;
     uint256 public endTime;
     bool public ended;
@@ -43,10 +43,12 @@ contract Auction {
 
     function withdraw() public returns (bool) {
         require(bids[msg.sender] > 0, "No funds to withdraw.");
-        require(ended || msg.sender != highestBidder, "Only the highest bidder can not withdraw before the auction ends.");
-        
+        require(
+            ended || msg.sender != highestBidder, "Only the highest bidder can not withdraw before the auction ends."
+        );
+
         payable(msg.sender).transfer(bids[msg.sender]);
-        bids[msg.sender] =  0;
+        bids[msg.sender] = 0;
         coolTime[msg.sender] = 0;
 
         return true;
@@ -57,9 +59,8 @@ contract Auction {
         require(!ended, "end function has already been called.");
 
         payable(owner).transfer(highestBid);
-        ended = true; 
+        ended = true;
 
         emit AuctionEnded(highestBidder, highestBid);
     }
-
 }
