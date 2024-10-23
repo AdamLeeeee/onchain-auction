@@ -14,12 +14,12 @@ contract AuctionTest is Test {
         owner = address(0x3);
         bidder1 = address(0x1);
         bidder2 = address(0x2);
-        
+
         vm.prank(owner);
         auction = new Auction(100, block.timestamp + 1000, 10);
     }
 
-    function testInitialState() public view{
+    function testInitialState() public view {
         assertEq(auction.startingPrice(), 100);
         assertEq(auction.owner(), owner);
         assertEq(auction.highestBidder(), address(0));
@@ -88,7 +88,7 @@ contract AuctionTest is Test {
         vm.warp(auction.endTime() + auction.coolTimeLimit() + 1);
 
         uint256 ownerBalanceBefore = owner.balance;
-        
+
         assertGe(address(auction).balance, auction.highestBid(), "Contract doesn't have enough balance");
 
         vm.prank(owner);

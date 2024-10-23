@@ -54,18 +54,18 @@ contract Auction {
         uint256 amount = waitingReturns[msg.sender];
         waitingReturns[msg.sender] = 0;
 
-        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        (bool success,) = payable(msg.sender).call{value: amount}("");
         require(success, "Transfer failed.");
 
         return true;
     }
 
-    function end() public returns (bool){
+    function end() public returns (bool) {
         require(msg.sender == owner, "Only the owner can end the auction.");
         require(block.timestamp >= endTime, "Auction not yet ended.");
         require(!ended, "end function has already been called.");
 
-        (bool success, ) = payable(owner).call{value: highestBid}("");
+        (bool success,) = payable(owner).call{value: highestBid}("");
         require(success, "Transfer failed.");
         ended = true;
 
