@@ -31,6 +31,7 @@ contract Auction {
         require(block.timestamp < endTime, "Auction already ended.");
         require(coolTime[msg.sender] < block.timestamp, "You must wait for the cool time to pass.");
         require(msg.value > highestBid, "There already is a higher bid.");
+        require(msg.sender == owner, "Owner can't join the auction bid.");
 
         if (highestBid != 0) {
             waitingReturns[highestBidder] += highestBid;
