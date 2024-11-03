@@ -1,66 +1,14 @@
-## Foundry
+## Onchain Auction
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+**链上拍卖会是个链上系统，允许卖家挂上商品，让买家出价竞争**
 
-Foundry consists of:
+已实现的功能:
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+-   **挂单进行拍卖**: 合约的创建即视为开始挂单拍卖。创建合约时需要设定起拍价、拍卖结束时间和冷却时间限制。
+-   **出价竞价**: 除了拥有者之外，任何人可以参与拍卖进行出价竞价，前提是出价者的出价比之前的最高价或者起拍价要高、没有在冷却时间内并有足够的资金保证交易成功。
+-   **提款**: 竞价者出价后，竞价者的资金会保留在合约中。除了最高价者，其他竞价者可以提取自己在合约中保留的资金。拍卖结束后，发起者可以提取等额于拍卖成交价的金额（暂时忽略gas）。
+-   **结束拍卖会**: 发起人在结束时间后可以关闭拍卖会，结束后无法竞价，可以提款。
 
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+亮点:
+-   **拍卖会终局延长**： 结束时间有可能会被延长，触发条件为当有竞价者在结束时间前的x秒内出价，结束时间就会被延长x秒，避免有竞价者在最后时刻出价并造成不公平的拍卖环境。（x等于出价冷却时间）。
+-   **竞拍冷却机制**：  竞价者出价时会校验是否在冷却时间内，如果在的话则无法竞价，需要等冷却时间后才能再次竞价。
